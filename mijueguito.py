@@ -11,6 +11,7 @@ pygame.display.set_caption("Aventura de Supervivencia")
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+# Cargar imágenes
 img_beach = pygame.image.load("playa.png")
 img_jungle = pygame.image.load("Selva.png")
 img_fruits = pygame.image.load("food.png")
@@ -25,11 +26,15 @@ img_avocado = pygame.image.load("avocado.png")
 img_trampa = pygame.image.load("trampa.png")
 img_rio = pygame.image.load("rio.png")
 img_madera = pygame.image.load("madera.png")
-img_hojas= pygame.image.load("hojas.png")
+img_hojas = pygame.image.load("hojas.png")
 img_paja = pygame.image.load("paja.png")
 img_path = pygame.image.load("path.png")
-img_animal =pygame.image.load("animal.png") 
+img_animal = pygame.image.load("animal.png")
+img_cuerpo = pygame.image.load("muerte.png")
+img_piedra = pygame.image.load("muerte.png")
+img_wata = pygame.image.load("wata.png")
 
+# Escalar imágenes
 img_beach = pygame.transform.scale(img_beach, (WIDTH, HEIGHT))
 img_jungle = pygame.transform.scale(img_jungle, (WIDTH, HEIGHT))
 img_fruits = pygame.transform.scale(img_fruits, (WIDTH, HEIGHT))
@@ -47,7 +52,11 @@ img_hojas = pygame.transform.scale(img_hojas, (WIDTH, HEIGHT))
 img_paja = pygame.transform.scale(img_paja, (WIDTH, HEIGHT))
 img_path = pygame.transform.scale(img_path, (WIDTH, HEIGHT))
 img_animal = pygame.transform.scale(img_animal, (WIDTH, HEIGHT))
+img_cuerpo = pygame.transform.scale(img_cuerpo, (WIDTH, HEIGHT))
+img_piedra = pygame.transform.scale(img_piedra, (WIDTH, HEIGHT))
+img_wata = pygame.transform.scale(img_wata, (WIDTH, HEIGHT))
 
+# Fuente de texto
 font = pygame.font.Font(None, 36)
 
 def draw_text(text, x, y):
@@ -62,7 +71,7 @@ def show_state(state):
         draw_text("en una isla desierta. Desorientada, despierta en una playa de arena blanca", 30, 330)
         draw_text("rodeada de selva espesa. Con el eco de la tormenta aún resonando en sus oídos,", 30, 360)
         draw_text("comienza a explorar la isla, enfrentándose a desafíos y peligros mientras", 30, 390)
-        draw_text("busca una manera de sobrevivir y, eventualmente, regresar a casa", 30 , 420)
+        draw_text("busca una manera de sobrevivir y, eventualmente, regresar a casa", 30, 420)
         draw_text("1. Explorar la playa", 50, 550)
         draw_text("2. Adentrarse en la jungla", 50, 600)
     elif state == "beach":
@@ -74,7 +83,7 @@ def show_state(state):
     elif state == "find_food":
         screen.blit(img_fruits, (0, 0))
         draw_text("Buena opción, es necesario conservar energia, no sabes", 50, 100)
-        draw_text("cuanto tiempo pasaras aqui ¿Qué tipo de comida buscas?", 50, 130 )
+        draw_text("cuanto tiempo pasaras aqui ¿Qué tipo de comida buscas?", 50, 130)
         draw_text("1. Buscar frutas en los arboles", 50, 160)
         draw_text("2. Buscar agua para pescar", 50, 210)
     elif state == "find_fruits":
@@ -128,7 +137,14 @@ def show_state(state):
         draw_text("2. Seguir las huellas hasta una fuente de agua", 50, 200)
     elif state == "hunt_animal":
         screen.blit(img_animal, (0, 0))
-        draw_text("1. Cazar cuerpo a cuerpo o 2. Tirarle piedras hasta matarlo", 50, 50)
+        draw_text("1. Cazar cuerpo a cuerpo, corriendo el riesgo de morir.", 50, 50)
+        draw_text("2. Tirarle piedras hasta matarlo, corriendo el riesgo de que huya.", 50, 100)
+    elif state == "cuerpo":
+        screen.blit(img_cuerpo, (0, 0))
+        draw_text("Cómo te vas a atrever? moriste por falta de recursos.", 50, 50)
+    elif state == "piedra":
+        screen.blit(img_piedra, (0, 0))
+        draw_text("Al tirarle la primera piedra el animal escucha y sale corriendo.", 50, 50)
     elif state == "find_water_source":
         screen.blit(img_water, (0, 0))
         draw_text("Encuentras una fuente de agua y sobrevives", 50, 100)
@@ -177,6 +193,8 @@ def game():
                         state = "follow_path"
                     elif state == "follow_path":
                         state = "hunt_animal"
+                    elif state == "hunt_animal":
+                        state = "cuerpo"
                     elif state == "fish":
                         state = "trampa"
                 elif event.key == pygame.K_2:
@@ -194,6 +212,8 @@ def game():
                         state = "find_water"
                     elif state == "follow_path":
                         state = "find_water_source"
+                    elif state == "hunt_animal":
+                        state = "piedra"
                     elif state == "fish":
                         state = "rio"
                 elif event.key == pygame.K_3:
