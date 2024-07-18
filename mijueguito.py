@@ -99,32 +99,6 @@ def show_state(state):
         screen.blit(img_mandarina, (0, 0))
         draw_text("Agarras una mandarina algo amarilla, agarras las pepitas", 50, 100)
         draw_text("y las plantas y en pocos días crecen nuevas cosechas", 50, 150)
-        draw_text("1. Recolectar más mandarinas", 50, 200)
-        draw_text("2. Explorar el área", 50, 250)
-    elif state == "recolectar_mandarinas":
-        screen.blit(img_mandarina, (0, 0))
-        draw_text("Recolectas más mandarinas, ahora tienes suficiente comida.", 50, 100)
-    elif state == "explorar_area":
-        screen.blit(img_jungle, (0, 0))
-        draw_text("Exploras el área y encuentras una cueva para refugiarte.", 50, 100)
-        draw_text("1. Entrar a la cueva", 50, 150)
-        draw_text("2. Buscar otro lugar", 50, 200)
-    elif state == "entrar_cueva":
-        screen.blit(img_shelter, (0, 0))
-        draw_text("Entras a la cueva y encuentras refugio seguro. ¡Sobrevives!", 50, 100)
-    elif state == "buscar_otro_lugar":
-        screen.blit(img_jungle, (0, 0))
-        draw_text("Buscas otro lugar y encuentras un río.", 50, 100)
-        draw_text("1. Beber agua del río", 50, 150)
-        draw_text("2. Seguir explorando", 50, 200)
-    elif state == "beber_agua_rio":
-        screen.blit(img_rio, (0, 0))
-        draw_text("Bebes agua del río y te enfermas. Lamentablemente mueres.", 50, 100)
-    elif state == "seguir_explorando":
-        screen.blit(img_jungle, (0, 0))
-        draw_text("Sigues explorando y encuentras un sendero.", 50, 100)
-        draw_text("1. Seguir el sendero", 50, 150)
-        draw_text("2. Buscar otra ruta", 50, 200)
     elif state == "take_avocado":
         screen.blit(img_avocado, (0, 0))
         draw_text("Agarras un aguacate podrido y mueres", 50, 100)
@@ -135,14 +109,6 @@ def show_state(state):
     elif state == "trampa":
         screen.blit(img_trampa, (0, 0))
         draw_text("Consigues el suficiente pescado para sobrevivir unos días", 50, 100)
-        draw_text("1. Guardar pescado", 50, 150)
-        draw_text("2. Comer pescado", 50, 200)
-    elif state == "guardar_pescado":
-        screen.blit(img_shelter, (0, 0))
-        draw_text("Guardas el pescado para más tarde. Construyes un refugio.", 50, 100)
-    elif state == "comer_pescado":
-        screen.blit(img_fish, (0, 0))
-        draw_text("Comes el pescado y te sientes mejor. ¡Sobrevives!", 50, 100)
     elif state == "rio":
         screen.blit(img_rio, (0, 0))
         draw_text("En el río habían pirañas y mueres D:", 50, 100)
@@ -173,6 +139,17 @@ def show_state(state):
         screen.blit(img_animal, (0, 0))
         draw_text("1. Cazar cuerpo a cuerpo, corriendo el riesgo de morir.", 50, 50)
         draw_text("2. Tirarle piedras hasta matarlo, corriendo el riesgo de que huya.", 50, 100)
+    elif state == "follow":
+        screen.blit(img_fuente, (0,0))
+        draw_text("Encontraste una fuente de agua! pero el animal sigue caminando", 50, 100)
+        draw_text("1. Quedarte ahí, y dejar al animal seguir", 50, 150)
+        draw_text("2. Seguir al animal")
+    elif state == "stay":
+        screen.blit(img_rio, (0,0))
+        draw_text("Felicidades! lograste sobrevirir gracias al Rio")
+    elif state == "followw": 
+        screen.blit(img_manada, (0,0))
+        draw_text("")
     elif state == "cuerpo":
         screen.blit(img_cuerpo, (0, 0))
         draw_text("Cómo te vas a atrever? moriste por falta de recursos.", 50, 50)
@@ -183,20 +160,7 @@ def show_state(state):
         screen.blit(img_water, (0, 0))
         draw_text("Encuentras una fuente de agua y sobrevives", 50, 100)
     elif state == "find_water":
-        screen.blit(img_jungle, (0, 0))  # # Cambié a img_jungle para evitar pantalla en blanco
         draw_text("Encuentras una civilización caníbal y mueres", 50, 50)
-    elif state == "seguir_sendero":  # # Agregada nueva opción para seguir el sendero
-        screen.blit(img_path, (0, 0))
-        draw_text("Sigues el sendero y encuentras una cascada.", 50, 100)
-        draw_text("1. Beber agua de la cascada", 50, 150)
-        draw_text("2. Explorar alrededor de la cascada", 50, 200)
-    elif state == "beber_cascada":
-        screen.blit(img_water, (0, 0))
-        draw_text("Bebes agua de la cascada y te sientes mejor. ¡Sobrevives!", 50, 100)
-    elif state == "explorar_cascada":
-        screen.blit(img_jungle, (0, 0))  # # Cambié a img_jungle para mantener la consistencia
-        draw_text("Exploras alrededor de la cascada y encuentras un refugio natural.", 50, 100)
-        draw_text("¡Sobrevives!", 50, 150)
     pygame.display.flip()
 
 def ask_question(question):
@@ -234,10 +198,6 @@ def game():
                         state = "find_fruits"
                     elif state == "find_fruits":
                         state = "take_apple"
-                    elif state == "take_mandarina":
-                        state = "recolectar_mandarinas"
-                    elif state == "explorar_area":
-                        state = "entrar_cueva"
                     elif state == "build_shelter":
                         state = "madera"
                     elif state == "jungle":
@@ -248,12 +208,6 @@ def game():
                         state = "cuerpo"
                     elif state == "fish":
                         state = "trampa"
-                    elif state == "trampa":
-                        state = "guardar_pescado"
-                    elif state == "seguir_sendero":
-                        state = "beber_cascada"
-                    elif state == "buscar_otro_lugar":
-                        state = "beber_agua_rio"  # # Agregada nueva opción para buscar otro lugar
                 elif event.key == pygame.K_2:
                     if state == "start":
                         state = "jungle"
@@ -263,10 +217,6 @@ def game():
                         state = "fish"
                     elif state == "find_fruits":
                         state = "take_mandarina"
-                    elif state == "take_mandarina":
-                        state = "explorar_area"
-                    elif state == "explorar_area":
-                        state = "buscar_otro_lugar"
                     elif state == "build_shelter":
                         state = "hojas"
                     elif state == "jungle":
@@ -277,10 +227,6 @@ def game():
                         state = "piedra"
                     elif state == "fish":
                         state = "rio"
-                    elif state == "trampa":
-                        state = "comer_pescado"
-                    elif state == "seguir_sendero":
-                        state = "explorar_cascada"
                 elif event.key == pygame.K_3:
                     if state == "find_fruits":
                         state = "take_avocado"
