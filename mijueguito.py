@@ -1,244 +1,240 @@
 import pygame
 import sys
-import random
 
 pygame.init()
 
 WIDTH, HEIGHT = 1000, 800
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+DARK_RED = (139, 0, 0)
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Aventura de Supervivencia")
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+def load_image(filename):
+    return pygame.transform.scale(pygame.image.load(filename), (WIDTH, HEIGHT))
 
-# Cargar imágenes
-img_beach = pygame.image.load("playa.png")
-img_jungle = pygame.image.load("Selva.png")
-img_fruits = pygame.image.load("food.png")
-img_fish = pygame.image.load("peces.png")
-img_shelter = pygame.image.load("cueva.png")
-img_water = pygame.image.load("agua.png")
-img_cover = pygame.image.load("cover1.png")
-img_frutas = pygame.image.load("frutas.png")
-img_apple = pygame.image.load("apple.png")
-img_mandarina = pygame.image.load("mandarina.png")
-img_avocado = pygame.image.load("avocado.png")
-img_trampa = pygame.image.load("trampa.png")
-img_rio = pygame.image.load("rio.png")
-img_madera = pygame.image.load("madera.png")
-img_hojas = pygame.image.load("hojas.png")
-img_paja = pygame.image.load("paja.png")
-img_path = pygame.image.load("path.png")
-img_animal = pygame.image.load("animal.png")
-img_cuerpo = pygame.image.load("muerte.png")
-img_piedra = pygame.image.load("muerte.png")
-img_wata = pygame.image.load("wata.png")
+images = {
+    "beach": load_image("playa.png"),
+    "jungle": load_image("selva.png"),
+    "fruits": load_image("frutas.png"),
+    "fish": load_image("peces.png"),
+    "shelter": load_image("cueva.png"),
+    "water": load_image("agua.png"),
+    "cover": load_image("cover1.png"),
+    "apple": load_image("apple.png"),
+    "mandarina": load_image("mandarina.png"),
+    "avocado": load_image("avocado.png"),
+    "trampa": load_image("trampa.png"),
+    "rio": load_image("rio.png"),
+    "madera": load_image("madera.png"),
+    "hojas": load_image("hojas.png"),
+    "paja": load_image("paja.png"),
+    "path": load_image("path.png"),
+    "animal": load_image("animal.png"),
+    "cuerpo": load_image("muerte.png"),
+    "piedra": load_image("muerte.png"),
+    "wata": load_image("wata.png"),
+    "shelter_building": load_image("shelter_building.png"),
+    "hidden_cave": load_image("hidden_cave.png"),
+    "firewood": load_image("firewood.png"),
+    "forest_path": load_image("forest_path.png"),
+    "mountain": load_image("mountain.png"),
+    "ocean": load_image("ocean.png"),
+    "shipwreck": load_image("shipwreck.png"),
+    "bird_nest": load_image("bird_nest.png"),
+    "coconut": load_image("coconut.png"),
+    "rescue": load_image("rescue.png"),
+    "no_rescue": load_image("no_rescue.png")
+}
 
-# Escalar imágenes
-img_beach = pygame.transform.scale(img_beach, (WIDTH, HEIGHT))
-img_jungle = pygame.transform.scale(img_jungle, (WIDTH, HEIGHT))
-img_fruits = pygame.transform.scale(img_fruits, (WIDTH, HEIGHT))
-img_fish = pygame.transform.scale(img_fish, (WIDTH, HEIGHT))
-img_shelter = pygame.transform.scale(img_shelter, (WIDTH, HEIGHT))
-img_water = pygame.transform.scale(img_water, (WIDTH, HEIGHT))
-img_cover = pygame.transform.scale(img_cover, (WIDTH, HEIGHT))
-img_apple = pygame.transform.scale(img_apple, (WIDTH, HEIGHT))
-img_mandarina = pygame.transform.scale(img_mandarina, (WIDTH, HEIGHT))
-img_avocado = pygame.transform.scale(img_avocado, (WIDTH, HEIGHT))
-img_trampa = pygame.transform.scale(img_trampa, (WIDTH, HEIGHT))
-img_rio = pygame.transform.scale(img_rio, (WIDTH, HEIGHT))
-img_madera = pygame.transform.scale(img_madera, (WIDTH, HEIGHT))
-img_hojas = pygame.transform.scale(img_hojas, (WIDTH, HEIGHT))
-img_paja = pygame.transform.scale(img_paja, (WIDTH, HEIGHT))
-img_path = pygame.transform.scale(img_path, (WIDTH, HEIGHT))
-img_animal = pygame.transform.scale(img_animal, (WIDTH, HEIGHT))
-img_cuerpo = pygame.transform.scale(img_cuerpo, (WIDTH, HEIGHT))
-img_piedra = pygame.transform.scale(img_piedra, (WIDTH, HEIGHT))
-img_wata = pygame.transform.scale(img_wata, (WIDTH, HEIGHT))
-
-# Fuente de texto
-font = pygame.font.Font(None, 36)
+font = pygame.font.SysFont("Times New Roman", 36)
 
 def draw_text(text, x, y):
-    text_surface = font.render(text, True, WHITE)
+    text_surface = font.render(text, True, DARK_RED)
     screen.blit(text_surface, (x, y))
 
 def show_state(state):
-    screen.fill(WHITE)
-    if state == "start":
-        screen.blit(img_cover, (0, 0))
-        draw_text("Naomi es una joven aventurera que, tras un naufragio, se encuentra sola", 30, 300)
-        draw_text("en una isla desierta. Desorientada, despierta en una playa de arena blanca", 30, 330)
-        draw_text("rodeada de selva espesa. Con el eco de la tormenta aún resonando en sus oídos,", 30, 360)
-        draw_text("comienza a explorar la isla, enfrentándose a desafíos y peligros mientras", 30, 390)
-        draw_text("busca una manera de sobrevivir y, eventualmente, regresar a casa", 30, 420)
-        draw_text("1. Explorar la playa", 50, 550)
-        draw_text("2. Adentrarse en la jungla", 50, 600)
-    elif state == "beach":
-        screen.blit(img_beach, (0, 0))
-        draw_text("Bien! llegaste a la playa, el viento está lo suficientemente", 50, 150)
-        draw_text("fuerte cómo para no dejarte ver, Que prefieres hacer?", 50, 180)
-        draw_text("1. Buscar comida a los alrededores", 50, 300)
-        draw_text("2. Buscar materiales y construir un refugio", 50, 340)
-    elif state == "find_food":
-        screen.blit(img_fruits, (0, 0))
-        draw_text("Buena opción, es necesario conservar energia, no sabes", 50, 100)
-        draw_text("cuanto tiempo pasaras aqui ¿Qué tipo de comida buscas?", 50, 130)
-        draw_text("1. Buscar frutas en los arboles", 50, 160)
-        draw_text("2. Buscar agua para pescar", 50, 210)
-    elif state == "find_fruits":
-        screen.blit(img_frutas, (0, 0))
-        draw_text("Encuentras un arbol con distintas frutas, ¿Cual tomas?", 50, 50)
-        draw_text("1. Manzanas verdes", 50, 100)
-        draw_text("2. Mandarinas algo amarillas", 50, 150)
-        draw_text("3. Aguacates color café", 50, 200)
-    elif state == "take_apple":
-        screen.blit(img_apple, (0, 0))
-        draw_text("Agarras una manzana, la comes y lamentablemente mueres", 50, 100)
-    elif state == "take_mandarina":
-        screen.blit(img_mandarina, (0, 0))
-        draw_text("Agarras una mandarina algo amarilla, agarras las pepitas", 50, 100)
-        draw_text("y las plantas y en pocos días crecen nuevas cosechas", 50, 150)
-    elif state == "take_avocado":
-        screen.blit(img_avocado, (0, 0))
-        draw_text("Agarras un aguacate podrido y mueres", 50, 100)
-    elif state == "fish":
-        screen.blit(img_fish, (0, 0))
-        draw_text("1. Pescar con trampa", 50, 100)
-        draw_text("2. Meterte al río", 50, 150)
-    elif state == "trampa":
-        screen.blit(img_trampa, (0, 0))
-        draw_text("Consigues el suficiente pescado para sobrevivir unos días", 50, 100)
-    elif state == "rio":
-        screen.blit(img_rio, (0, 0))
-        draw_text("En el río habían pirañas y mueres D:", 50, 100)
-    elif state == "build_shelter":
-        screen.blit(img_shelter, (0, 0))
-        draw_text("Elige materiales: 1. Madera, 2. Hojas, 3. Paja", 50, 100)
-    elif state == "madera":
-        screen.blit(img_madera, (0, 0))
-        draw_text("Construyes un refugio y sobrevives", 50, 100)
-    elif state == "hojas":
-        screen.blit(img_hojas, (0, 0))
-        draw_text("No es lo suficientemente fuerte y mueres de frio", 50, 100)
-    elif state == "paja":
-        screen.blit(img_paja, (0, 0))
-        draw_text("Construyes una casa pero no lo suficientemente fuerte y te", 50, 100)
-        draw_text("matan los animales alrededor", 50, 140)
-    elif state == "jungle":
-        screen.blit(img_jungle, (0, 0))
-        draw_text("¿Qué prefieres hacer primero?", 50, 100)
-        draw_text("1. Seguir un sendero", 50, 150)
-        draw_text("2. Buscar una fuente de agua", 50, 200)
-    elif state == "follow_path":
-        screen.blit(img_path, (0, 0))
-        draw_text("¿Wow! huellas, Qué decides hacer?", 50, 100)
-        draw_text("1. Cazar un animal", 50, 150)
-        draw_text("2. Seguir las huellas hasta una fuente de agua", 50, 200)
-    elif state == "hunt_animal":
-        screen.blit(img_animal, (0, 0))
-        draw_text("1. Cazar cuerpo a cuerpo, corriendo el riesgo de morir.", 50, 50)
-        draw_text("2. Tirarle piedras hasta matarlo, corriendo el riesgo de que huya.", 50, 100)
-    elif state == "follow":
-        screen.blit(img_fuente, (0,0))
-        draw_text("Encontraste una fuente de agua! pero el animal sigue caminando", 50, 100)
-        draw_text("1. Quedarte ahí, y dejar al animal seguir", 50, 150)
-        draw_text("2. Seguir al animal")
-    elif state == "stay":
-        screen.blit(img_rio, (0,0))
-        draw_text("Felicidades! lograste sobrevirir gracias al Rio")
-    elif state == "followw": 
-        screen.blit(img_manada, (0,0))
-        draw_text("")
-    elif state == "cuerpo":
-        screen.blit(img_cuerpo, (0, 0))
-        draw_text("Cómo te vas a atrever? moriste por falta de recursos.", 50, 50)
-    elif state == "piedra":
-        screen.blit(img_piedra, (0, 0))
-        draw_text("Al tirarle la primera piedra el animal escucha y sale corriendo.", 50, 50)
-    elif state == "find_water_source":
-        screen.blit(img_water, (0, 0))
-        draw_text("Encuentras una fuente de agua y sobrevives", 50, 100)
-    elif state == "find_water":
-        draw_text("Encuentras una civilización caníbal y mueres", 50, 50)
-    pygame.display.flip()
-
-def ask_question(question):
-    screen.fill(WHITE)
-    draw_text(question, 50, 250)
-    draw_text("1. Sí", 50, 300)
-    draw_text("2. No", 50, 350)
-    pygame.display.flip()
-
-def game():
-    state = "start"
+    screen.fill(BLACK)
+    if state in images:
+        screen.blit(images[state], (0, 0))
     
-    questions = [
-        "¿Te gusta explorar?",
-        "¿Tienes miedo a la oscuridad?",
-        "¿Prefieres el calor o el frío?",
-        "¿Eres bueno construyendo cosas?",
-        "¿Te gustan los animales salvajes?"
-    ]
-    random.shuffle(questions)
+    state_texts = {
+        "start": [
+            ("Naomi es una joven aventurera que, tras un naufragio, se encuentra sola", 30, 300),
+            ("1. Explorar la playa", 50, 550),
+            ("2. Adentrarse en la jungla", 50, 600)
+        ],
+        "beach": [
+            ("Bien! llegaste a la playa. ¿Qué prefieres hacer?", 50, 150),
+            ("1. Buscar comida a los alrededores", 50, 300),
+            ("2. Buscar materiales y construir un refugio", 50, 340)
+        ],
+        "find_food": [
+            ("Buena opción, es necesario conservar energia. ¿Qué tipo de comida buscas?", 50, 130),
+            ("1. Buscar frutas en los arboles", 50, 160),
+            ("2. Buscar agua para pescar", 50, 210)
+        ],
+        "find_fruits": [
+            ("Encuentras un arbol con distintas frutas, ¿Cual tomas?", 50, 50),
+            ("1. Manzanas verdes", 50, 100),
+            ("2. Mandarinas algo amarillas", 50, 150),
+            ("3. Aguacates color café", 50, 200)
+        ],
+        "take_apple": [
+            ("Agarras una manzana, la comes y lamentablemente mueres", 50, 100)
+        ],
+        "take_mandarina": [
+            ("Agarras una mandarina algo amarilla, agarras las pepitas", 50, 100),
+            ("y las plantas y en pocos días crecen nuevas cosechas", 50, 150)
+        ],
+        "take_avocado": [
+            ("Agarras un aguacate podrido y mueres", 50, 100)
+        ],
+        "fish": [
+            ("1. Pescar con trampa", 50, 100),
+            ("2. Meterte al río", 50, 150)
+        ],
+        "trampa": [
+            ("Consigues el suficiente pescado para sobrevivir unos días", 50, 100)
+        ],
+        "rio": [
+            ("En el río habían pirañas y mueres D:", 50, 100)
+        ],
+        "build_shelter": [
+            ("Elige materiales: 1. Madera, 2. Hojas, 3. Paja", 50, 100)
+        ],
+        "madera": [
+            ("Construiste un refugio muy resistente", 50, 100)
+        ],
+        "hojas": [
+            ("Construiste un refugio muy débil y no resistió la tormenta", 50, 100)
+        ],
+        "paja": [
+            ("Construiste un refugio resistente pero sin calor", 50, 100)
+        ],
+        "jungle": [
+            ("Dentro de la jungla hay muchos peligros. ¿Qué decides?", 50, 100),
+            ("1. Seguir el camino de tierra", 50, 150),
+            ("2. Seguir el rastro de un animal", 50, 200)
+        ],
+        "path": [
+            ("Siguiendo el camino te encuentras con una cueva oculta", 50, 100),
+            ("1. Entrar en la cueva", 50, 150),
+            ("2. Seguir el camino", 50, 200)
+        ],
+        "animal": [
+            ("Sigues el rastro del animal. ¿Qué decides hacer ahora?", 50, 100),
+            ("1. Intentar cazarlo", 50, 150),
+            ("2. Observarlo a distancia", 50, 200)
+        ],
+        "cazar_animal": [
+            ("Intentas cazar el animal, pero te encuentras con un peligro inesperado.", 50, 100),
+            ("1. Luchar", 50, 150),
+            ("2. Huir", 50, 200)
+        ],
+        "observar_animal": [
+            ("Observas el animal y descubres un nuevo camino.", 50, 100),
+            ("1. Seguir el camino", 50, 150),
+            ("2. Regresar", 50, 200)
+        ],
+        "luchar": [
+            ("Luchas valientemente, pero el animal es demasiado fuerte. Mueres.", 50, 100)
+        ],
+        "huir": [
+            ("Huyes rápidamente y encuentras un nuevo camino.", 50, 100),
+            ("1. Explorar el nuevo camino", 50, 150),
+            ("2. Regresar a la selva", 50, 200)
+        ],
+        "nuevo_camino": [
+            ("Exploras el nuevo camino y descubres una cueva.", 50, 100),
+            ("1. Entrar en la cueva", 50, 150),
+            ("2. Continuar explorando", 50, 200)
+        ],
+        "cave": [
+            ("Dentro de la cueva hay materiales para hacer una fogata", 50, 100),
+            ("1. Encender la fogata", 50, 150),
+            ("2. Salir de la cueva", 50, 200)
+        ],
+        "forest_path": [
+            ("Sigues el camino y encuentras una montaña", 50, 100),
+            ("1. Subir la montaña", 50, 150),
+            ("2. Seguir el camino", 50, 200)
+        ],
+        "mountain": [
+            ("Subes la montaña y divisas un barco en el horizonte", 50, 100),
+            ("1. Nadar hacia el barco", 50, 150),
+            ("2. Gritar para llamar la atención", 50, 200)
+        ],
+        "ocean": [
+            ("Te adentras en el océano y nadas hacia el barco", 50, 100),
+            ("1. Intentar llegar al barco", 50, 150),
+            ("2. Regresar a la playa", 50, 200)
+        ],
+        "shipwreck": [
+            ("El barco naufragado está lleno de provisiones", 50, 100),
+            ("1. Tomar provisiones", 50, 150),
+            ("2. Seguir explorando el barco", 50, 200)
+        ],
+        "bird_nest": [
+            ("Encuentras un nido de pájaro con huevos", 50, 100),
+            ("1. Tomar los huevos", 50, 150),
+            ("2. Dejar los huevos", 50, 200)
+        ],
+        "coconut": [
+            ("Encuentras un coco y te hidratas", 50, 100)
+        ],
+        "rescue": [
+            ("Felicidades! Has sido rescatado.", 50, 100)
+        ],
+        "no_rescue": [
+            ("Nadie vino a rescatarte. Sigue intentando.", 50, 100)
+        ]
+    }
+    
+    if state in state_texts:
+        for text, x, y in state_texts[state]:
+            draw_text(text, x, y)
 
-    question_counter = 0
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    if state == "start":
-                        state = "beach"
-                    elif state == "beach":
-                        state = "find_food"
-                    elif state == "find_food":
-                        state = "find_fruits"
-                    elif state == "find_fruits":
-                        state = "take_apple"
-                    elif state == "build_shelter":
-                        state = "madera"
-                    elif state == "jungle":
-                        state = "follow_path"
-                    elif state == "follow_path":
-                        state = "hunt_animal"
-                    elif state == "hunt_animal":
-                        state = "cuerpo"
-                    elif state == "fish":
-                        state = "trampa"
-                elif event.key == pygame.K_2:
-                    if state == "start":
-                        state = "jungle"
-                    elif state == "beach":
-                        state = "build_shelter"
-                    elif state == "find_food":
-                        state = "fish"
-                    elif state == "find_fruits":
-                        state = "take_mandarina"
-                    elif state == "build_shelter":
-                        state = "hojas"
-                    elif state == "jungle":
-                        state = "find_water"
-                    elif state == "follow_path":
-                        state = "find_water_source"
-                    elif state == "hunt_animal":
-                        state = "piedra"
-                    elif state == "fish":
-                        state = "rio"
-                elif event.key == pygame.K_3:
-                    if state == "find_fruits":
-                        state = "take_avocado"
-                    elif state == "build_shelter":
-                        state = "paja"
+    pygame.display.flip()
 
-        if state == "start" and question_counter < len(questions):
-            ask_question(questions[question_counter])
-            question_counter += 1
-        else:
-            show_state(state)
+def handle_event(event, state):
+    if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+    elif event.type == pygame.KEYDOWN:
+        state_transitions = {
+            "start": {pygame.K_1: "beach", pygame.K_2: "jungle"},
+            "beach": {pygame.K_1: "find_food", pygame.K_2: "build_shelter"},
+            "find_food": {pygame.K_1: "find_fruits", pygame.K_2: "fish"},
+            "find_fruits": {pygame.K_1: "take_apple", pygame.K_2: "take_mandarina", pygame.K_3: "take_avocado"},
+            "fish": {pygame.K_1: "trampa", pygame.K_2: "rio"},
+            "build_shelter": {pygame.K_1: "madera", pygame.K_2: "hojas", pygame.K_3: "paja"},
+            "jungle": {pygame.K_1: "path", pygame.K_2: "animal"},
+            "path": {pygame.K_1: "cave", pygame.K_2: "forest_path"},
+            "animal": {pygame.K_1: "cazar_animal", pygame.K_2: "observar_animal"},
+            "cazar_animal": {pygame.K_1: "luchar", pygame.K_2: "huir"},
+            "observar_animal": {pygame.K_1: "nuevo_camino", pygame.K_2: "jungle"},
+            "nuevo_camino": {pygame.K_1: "cave", pygame.K_2: "forest_path"},
+            "cave": {pygame.K_1: "firewood", pygame.K_2: "forest_path"},
+            "forest_path": {pygame.K_1: "mountain", pygame.K_2: "ocean"},
+            "mountain": {pygame.K_1: "ocean", pygame.K_2: "rescue"},
+            "ocean": {pygame.K_1: "shipwreck", pygame.K_2: "beach"},
+            "shipwreck": {pygame.K_1: "bird_nest", pygame.K_2: "coconut"},
+            "bird_nest": {pygame.K_1: "rescue", pygame.K_2: "no_rescue"},
+        }
 
-        pygame.display.flip()
+        if state in state_transitions and event.key in state_transitions[state]:
+            return state_transitions[state][event.key]
+        elif state in ["take_apple", "take_mandarina", "take_avocado", "trampa", "rio", "madera", "hojas", "paja", "luchar", "huir", "coconut", "rescue", "no_rescue"]:
+            return "start"
 
-game()
+    return state
+
+state = "start"
+
+while True:
+    for event in pygame.event.get():
+        state = handle_event(event, state)
+    
+    show_state(state)
